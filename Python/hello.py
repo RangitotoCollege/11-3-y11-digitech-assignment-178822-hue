@@ -119,16 +119,19 @@ if game == code_for_anagramma:
 # PAPER SCISSORS ROCK
 
 if game == code_for_PSR:
+    consecutive_wins = 0
+    win_point = 1
     finished = False
     options = ["paper", "scissors", "rock"]
-    choice = input("Choose paper, scissors, or rock: ")
-    comp_choice = random.choice(options)
-    while choice not in options:
-        print("Choose a valid option.")
-        choice = input("Choose paper, scissors, or rock: ")
-        time.sleep(1)
 
-    while finished == False:
+    while not finished:
+        choice = input("Choose paper, scissors, or rock: ").lower()
+        while choice not in options:
+            print("Choose a valid option.")
+            choice = input("Choose paper, scissors, or rock: ").lower()
+            time.sleep(1)
+
+        comp_choice = random.choice(options)
 
         if choice == comp_choice:
             print(f"Oooh, you both chose {choice}. It is a tie.")
@@ -138,27 +141,30 @@ if game == code_for_PSR:
                 print(
                     f"You lose. You chose {choice} and the computer chose {comp_choice}."
                 )
-            if comp_choice == "rock":
+            else:
                 print(
                     f"You won. You chose {choice} and the computer chose {comp_choice}."
                 )
+                consecutive_wins += win_point
         elif choice == "rock":
             if comp_choice == "paper":
                 finished = True
                 print(
                     f"You lose. You chose {choice} and the computer chose {comp_choice}."
                 )
-            if comp_choice == "scissors":
+            else:
                 print(
                     f"You won. You chose {choice} and the computer chose {comp_choice}."
                 )
-        elif choice == "paper":
-            if comp_choice == "scissors":
+                consecutive_wins += win_point
+        elif choice == "scissors":
+            if comp_choice == "rock":
                 finished = True
                 print(
                     f"You lose. You chose {choice} and the computer chose {comp_choice}."
                 )
-            if comp_choice == "rock":
+            else:
                 print(
                     f"You won. You chose {choice} and the computer chose {comp_choice}."
                 )
+                consecutive_wins += win_point
