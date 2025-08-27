@@ -127,47 +127,47 @@ if game == code_for_PSR:
     options = ["paper", "scissors", "rock"]
 
     while not finished:
-        choice = input("Choose paper, scissors, or rock: ").lower()
-        while choice not in options:
+        user_choice = input("Choose paper, scissors, or rock: ").lower()
+        while user_choice not in options:
             print("Choose a valid option.")
-            choice = input("Choose paper, scissors, or rock: ").lower()
+            user_choice = input("Choose paper, scissors, or rock: ").lower()
             time.sleep(1)
 
         comp_choice = random.choice(options)
 
-        if choice == comp_choice:
-            print(f"Oooh, you both chose {choice}. It is a tie.")
-        elif choice == "paper":
+        if user_choice == comp_choice:
+            print(f"Oooh, you both chose {user_choice}. It is a tie.")
+        elif user_choice == "paper":
             if comp_choice == "scissors":
                 finished = True
                 print(
-                    f"You lose. You chose {choice} and the computer chose {comp_choice}."
+                    f"You lose. You chose {user_choice} and the computer chose {comp_choice}."
                 )
             else:
                 print(
-                    f"You won. You chose {choice} and the computer chose {comp_choice}."
+                    f"You won. You chose {user_choice} and the computer chose {comp_choice}."
                 )
                 consecutive_wins += win_point
-        elif choice == "rock":
+        elif user_choice == "rock":
             if comp_choice == "paper":
                 finished = True
                 print(
-                    f"You lose. You chose {choice} and the computer chose {comp_choice}."
+                    f"You lose. You chose {user_choice} and the computer chose {comp_choice}."
                 )
             else:
                 print(
-                    f"You won. You chose {choice} and the computer chose {comp_choice}."
+                    f"You won. You chose {user_choice} and the computer chose {comp_choice}."
                 )
                 consecutive_wins += win_point
-        elif choice == "scissors":
+        elif user_choice == "scissors":
             if comp_choice == "rock":
                 finished = True
                 print(
-                    f"You lose. You chose {choice} and the computer chose {comp_choice}."
+                    f"You lose. You chose {user_choice} and the computer chose {comp_choice}."
                 )
             else:
                 print(
-                    f"You won. You chose {choice} and the computer chose {comp_choice}."
+                    f"You won. You chose {user_choice} and the computer chose {comp_choice}."
                 )
                 consecutive_wins += win_point
 
@@ -208,48 +208,50 @@ if game == code_for_blackjack:
     while True:
         player_score = sum(card_value(card) for card in player_card)
         dealer_score = sum(card_value(card) for card in dealer_card)
+
         print(
-            "Cards Player Has:",
-            ", ".join([f"{rank} of {suit}" for rank, suit in player_card]),
+            f"Cards Player Has: {', '.join([f'{rank} of {suit}' for rank, suit in player_card])}"
         )
         time.sleep(2)
-        print("Score Of The Player:", player_score)
+        print(f"Score of the Player: {player_score}")
         time.sleep(3)
         print("\n")
 
-        choice = input("Do you want to  hit or stand? h/s: ").lower()
+        choice = input("Do you want to hit or stand? h/s: ").lower()
+        if choice not in ["h", "s"]:  # error control
+            print("Please enter one of the valid options.")
+            continue
+
         if choice == "h":
             new_card = deck.pop()
+            print(f"Your new card: {new_card[0]} of {new_card[1]}")
+            time.sleep(1)
             player_card.append(new_card)
             player_score = sum(card_value(card) for card in player_card)
         elif choice == "s":
             break
-        else:
-            print("Invalid choice. Please try again.")
-            continue
 
         if player_score == 21:
             print("Nice! You're on 21.")
             print(
-                "Your cards:",
-                ", ".join([f"{rank} of {suit}" for rank, suit in player_card]),
+                f"Your cards: {', '.join([f'{rank} of {suit}' for rank, suit in player_card])}"
             )
+            game_over = True
             break
 
         if player_score > 21:
             print(
-                "Cards Dealer Has:",
-                ", ".join([f"{rank} of {suit}" for rank, suit in dealer_card]),
+                f"Cards Dealer Has: {', '.join([f'{rank} of {suit}' for rank, suit in dealer_card])}"
             )
-            print("Score Of The Dealer:", dealer_score)
+            print(f"Score of the Dealer: {dealer_score}")
             print(
-                "Cards Player Has:",
-                ", ".join([f"{rank} of {suit}" for rank, suit in player_card]),
+                f"Cards Player Has: {', '.join([f'{rank} of {suit}' for rank, suit in player_card])}"
             )
-            print("Score Of The Player:", player_score)
+            print(f"Score of the Player: {player_score}")
             print("BUST! Dealer wins")
             game_over = True
             break
+
     time.sleep(2)
     if game_over == False:
         while dealer_score < 17:
@@ -258,57 +260,48 @@ if game == code_for_blackjack:
             dealer_score += card_value(new_card)
 
         print(
-            "Cards Dealer Has:",
-            ", ".join([f"{rank} of {suit}" for rank, suit in dealer_card]),
+            f"Cards Dealer Has: {', '.join([f'{rank} of {suit}' for rank, suit in dealer_card])}"
         )
-        print("Score Of The Dealer:", dealer_score)
+        print(f"Score of the Dealer: {dealer_score}")
         print("\n")
 
         if dealer_score > 21:
             print(
-                "Cards Dealer Has:",
-                ", ".join([f"{rank} of {suit}" for rank, suit in dealer_card]),
+                f"Cards Dealer Has: {', '.join([f'{rank} of {suit}' for rank, suit in dealer_card])}"
             )
-            print("Score Of The Dealer:", dealer_score)
+            print(f"Score of the Dealer: {dealer_score}")
             print(
-                "Cards Player Has:",
-                ", ".join([f"{rank} of {suit}" for rank, suit in player_card]),
+                f"Cards Player Has: {', '.join([f'{rank} of {suit}' for rank, suit in player_card])}"
             )
-            print("Score Of The Player:", player_score)
-            print("Player wins (Dealer Loss Because Dealer Score is exceeding 21)")
+            print(f"Score of the Player: {player_score}")
+            print("Player wins (Dealer score is exceeding 21)")
         elif player_score > dealer_score:
             print(
-                "Cards Dealer Has:",
-                ", ".join([f"{rank} of {suit}" for rank, suit in dealer_card]),
+                f"Cards Dealer Has: {', '.join([f'{rank} of {suit}' for rank, suit in dealer_card])}"
             )
-            print("Score Of The Dealer:", dealer_score)
+            print(f"Score of the Dealer: {dealer_score}")
             print(
-                "Cards Player Has:",
-                ", ".join([f"{rank} of {suit}" for rank, suit in player_card]),
+                f"Cards Player Has: {', '.join([f'{rank} of {suit}' for rank, suit in player_card])}"
             )
-            print("Score Of The Player:", player_score)
-            print("Player wins (Player Has High Score than Dealer)")
+            print(f"Score of the Player: {player_score}")
+            print("Player wins (Player has higher score than Dealer)")
         elif dealer_score > player_score:
             print(
-                "Cards Dealer Has:",
-                ", ".join([f"{rank} of {suit}" for rank, suit in dealer_card]),
+                f"Cards Dealer Has: {', '.join([f'{rank} of {suit}' for rank, suit in dealer_card])}"
             )
-            print("Score Of The Dealer:", dealer_score)
+            print(f"Score of the Dealer: {dealer_score}")
             print(
-                "Cards Player Has:",
-                ", ".join([f"{rank} of {suit}" for rank, suit in player_card]),
+                f"Cards Player Has: {', '.join([f'{rank} of {suit}' for rank, suit in player_card])}"
             )
-            print("Score Of The Player:", player_score)
-            print("Dealer wins (Dealer Has High Score than Player)")
+            print(f"Score of the Player: {player_score}")
+            print("Dealer wins (Dealer has higher score than Player)")
         else:
             print(
-                "Cards Dealer Has:",
-                ", ".join([f"{rank} of {suit}" for rank, suit in dealer_card]),
+                f"Cards Dealer Has: {', '.join([f'{rank} of {suit}' for rank, suit in dealer_card])}"
             )
-            print("Score Of The Dealer:", dealer_score)
+            print(f"Score of the Dealer: {dealer_score}")
             print(
-                "Cards Player Has:",
-                ", ".join([f"{rank} of {suit}" for rank, suit in player_card]),
+                f"Cards Player Has: {', '.join([f'{rank} of {suit}' for rank, suit in player_card])}"
             )
-            print("Score Of The Player:", player_score)
+            print(f"Score of the Player: {player_score}")
             print("It's a tie.")
