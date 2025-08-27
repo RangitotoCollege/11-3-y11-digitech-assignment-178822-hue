@@ -1,8 +1,9 @@
 code_for_anagramma = "A"
 code_for_GTN = "GTN"
 code_for_PSR = "PSR"
+code_for_blackjack = "BJ"
 game = input(
-    "What game do you want to play? (Guess the number: GTN, Anagramma: A, Paper Scissors Rock: PSR)"
+    "What game do you want to play? (Guess the number: GTN, Anagramma: A, Paper Scissors Rock: PSR, Blackjack (21): BJ)"
 )
 # GUESS THE NUMBER
 
@@ -11,6 +12,7 @@ import time
 
 if game == code_for_GTN:
     win = False
+    guess_value = 1
     lowest_allowed = 1
     highest_allowed = 100
     number = random.randint(lowest_allowed, highest_allowed)
@@ -35,17 +37,17 @@ if game == code_for_GTN:
             guess = int(input("Enter your guess: "))
             if guess == number:
                 print(f"You guessed correctly! The number was {number}!")
-                guesses += 1
+                guesses += guess_value
                 win = True  # enabling the winning message at the end
                 break
             elif (
                 guess < number and guess >= lowest_allowed
             ):  # making sure number is within boundaries
                 print("Too low. Try again.")
-                guesses += 1
+                guesses += guess_value
             elif guess > number and guess <= highest_allowed:
                 print("Too high. Try again.")
-                guesses += 1
+                guesses += guess_value
             else:
                 print("Not in range. It should be from 1 to 100")
         except ValueError:  # catching value errors
@@ -168,3 +170,145 @@ if game == code_for_PSR:
                     f"You won. You chose {choice} and the computer chose {comp_choice}."
                 )
                 consecutive_wins += win_point
+
+# BLACKJACK
+if game == code_for_blackjack:
+    game_over = False
+
+    card_categories = ["Hearts", "Diamonds", "Clubs", "Spades"]
+    cards_list = [
+        "Ace",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6",
+        "7",
+        "8",
+        "9",
+        "10",
+        "Jack",
+        "Queen",
+        "King",
+    ]
+    deck = [(card, category) for category in card_categories for card in cards_list]
+
+    def card_value(card):
+        if card[0] in ["Jack", "Queen", "King"]:
+            return 10
+        elif card[0] == "Ace":
+            return 11
+        else:
+            return int(card[0])
+
+    random.shuffle(deck)
+    player_card = [deck.pop(), deck.pop()]
+    dealer_card = [deck.pop(), deck.pop()]
+
+    while True:
+        player_score = sum(card_value(card) for card in player_card)
+        dealer_score = sum(card_value(card) for card in dealer_card)
+        print(
+            "Cards Player Has:",
+            ", ".join([f"{rank} of {suit}" for rank, suit in player_card]),
+        )
+        time.sleep(2)
+        print("Score Of The Player:", player_score)
+        time.sleep(3)
+        print("\n")
+
+        choice = input("Do you want to  hit or stand? h/s: ").lower()
+        if choice == "h":
+            new_card = deck.pop()
+            player_card.append(new_card)
+            player_score = sum(card_value(card) for card in player_card)
+        elif choice == "s":
+            break
+        else:
+            print("Invalid choice. Please try again.")
+            continue
+
+        if player_score == 21:
+            print("Nice! You're on 21.")
+            print(
+                "Your cards:",
+                ", ".join([f"{rank} of {suit}" for rank, suit in player_card]),
+            )
+            break
+
+        if player_score > 21:
+            print(
+                "Cards Dealer Has:",
+                ", ".join([f"{rank} of {suit}" for rank, suit in dealer_card]),
+            )
+            print("Score Of The Dealer:", dealer_score)
+            print(
+                "Cards Player Has:",
+                ", ".join([f"{rank} of {suit}" for rank, suit in player_card]),
+            )
+            print("Score Of The Player:", player_score)
+            print("BUST! Dealer wins")
+            game_over = True
+            break
+    time.sleep(2)
+    if game_over == False:
+        while dealer_score < 17:
+            new_card = deck.pop()
+            dealer_card.append(new_card)
+            dealer_score += card_value(new_card)
+
+        print(
+            "Cards Dealer Has:",
+            ", ".join([f"{rank} of {suit}" for rank, suit in dealer_card]),
+        )
+        print("Score Of The Dealer:", dealer_score)
+        print("\n")
+
+        if dealer_score > 21:
+            print(
+                "Cards Dealer Has:",
+                ", ".join([f"{rank} of {suit}" for rank, suit in dealer_card]),
+            )
+            print("Score Of The Dealer:", dealer_score)
+            print(
+                "Cards Player Has:",
+                ", ".join([f"{rank} of {suit}" for rank, suit in player_card]),
+            )
+            print("Score Of The Player:", player_score)
+            print("Player wins (Dealer Loss Because Dealer Score is exceeding 21)")
+        elif player_score > dealer_score:
+            print(
+                "Cards Dealer Has:",
+                ", ".join([f"{rank} of {suit}" for rank, suit in dealer_card]),
+            )
+            print("Score Of The Dealer:", dealer_score)
+            print(
+                "Cards Player Has:",
+                ", ".join([f"{rank} of {suit}" for rank, suit in player_card]),
+            )
+            print("Score Of The Player:", player_score)
+            print("Player wins (Player Has High Score than Dealer)")
+        elif dealer_score > player_score:
+            print(
+                "Cards Dealer Has:",
+                ", ".join([f"{rank} of {suit}" for rank, suit in dealer_card]),
+            )
+            print("Score Of The Dealer:", dealer_score)
+            print(
+                "Cards Player Has:",
+                ", ".join([f"{rank} of {suit}" for rank, suit in player_card]),
+            )
+            print("Score Of The Player:", player_score)
+            print("Dealer wins (Dealer Has High Score than Player)")
+        else:
+            print(
+                "Cards Dealer Has:",
+                ", ".join([f"{rank} of {suit}" for rank, suit in dealer_card]),
+            )
+            print("Score Of The Dealer:", dealer_score)
+            print(
+                "Cards Player Has:",
+                ", ".join([f"{rank} of {suit}" for rank, suit in player_card]),
+            )
+            print("Score Of The Player:", player_score)
+            print("It's a tie.")
