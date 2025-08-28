@@ -1,10 +1,10 @@
-code_for_anagramma = "A"
-code_for_GTN = "GTN"
-code_for_PSR = "PSR"
-code_for_blackjack = "BJ"
+code_for_anagramma = "a"
+code_for_GTN = "gtn"
+code_for_PSR = "psr"
+code_for_blackjack = "bj"
 game = input(
-    "What game do you want to play? (Guess the number: GTN, Anagramma: A, Paper Scissors Rock: PSR, Blackjack (21): BJ)"
-)
+    "What game do you want to play? (Guess the number: gtn, Anagramma: a, Paper Scissors Rock: psr, Blackjack (21): bj)"
+).lower()
 # GUESS THE NUMBER
 
 import random
