@@ -121,6 +121,18 @@ if game == code_for_anagramma:
 # PAPER SCISSORS ROCK
 
 if game == code_for_PSR:
+    print(
+        """ 
+        WELCOME TO PAPER SCISSORS ROCK!!!
+
+        Both you and the computer will pick between paper, scissors, and rock!
+        
+        Paper beats rock, rock beats scissors, and scissors beat paper, and you want to get as many consecutive wins as you can.
+        
+        Best of luck, player!   
+
+        """
+    )  # welcome message for the player
     consecutive_wins = 0
     win_point = 1
     finished = False
@@ -173,6 +185,21 @@ if game == code_for_PSR:
 
 # BLACKJACK
 if game == code_for_blackjack:
+    print(
+        """
+    WELCOME TO BLACKJACK!!!
+
+    Try to get as close to 21 as you can without going over. 
+    
+    Face cards are worth 10, Aces are 11, and numbers keep their value. 
+    
+    You’ll start with two cards and can choose to hit (take another card) 
+    or stand (stick with what you have). The dealer will play after you. 
+    
+    Best of luck, player!
+    """
+    )  # welcome message for the player
+
     game_over = False
 
     card_categories = ["Hearts", "Diamonds", "Clubs", "Spades"]
