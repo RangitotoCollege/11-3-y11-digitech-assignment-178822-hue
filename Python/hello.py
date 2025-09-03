@@ -49,10 +49,16 @@ while True:
     code_for_GTN = "gtn"
     code_for_PSR = "psr"
     code_for_blackjack = "bj"
+    game_codes = [code_for_anagramma, code_for_GTN, code_for_PSR, code_for_blackjack]
 
     game = input(
         "What game do you want to play? (Guess the number: gtn, Anagramma: a, Paper Scissors Rock: psr, Blackjack (21): bj)"
     ).lower()
+    while game not in game_codes:
+        print("That is an invalid game code. Try again.")
+        game = input(
+            "What game do you want to play? (Guess the number: gtn, Anagramma: a, Paper Scissors Rock: psr, Blackjack (21): bj)"
+        ).lower()
     # GUESS THE NUMBER
 
     import random
