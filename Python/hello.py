@@ -1,3 +1,6 @@
+import random, time, os
+
+
 def run_loop(game_running):
     while True:
         if game_running == "PlayTopia":
@@ -61,9 +64,6 @@ while True:
         ).lower()
     # GUESS THE NUMBER
 
-    import random
-    import time
-
     if game == code_for_GTN:
         print(
             """ 
@@ -124,6 +124,13 @@ while True:
     # ANAGRAMMA
     if game == code_for_anagramma:
 
+        def get_random_word():
+            script_dir = os.path.dirname(__file__)
+            file_path = os.path.join(script_dir, "words.txt")
+            with open(file_path) as f:
+                words_in_file = f.read().splitlines()
+            return random.choice(words_in_file)
+
         print(
             """ 
             WELCOME TO ANAGRAMMA!!!
@@ -138,18 +145,7 @@ while True:
         )  # welcome message for the player
 
         while True:
-            words = [
-                "television",
-                "parachute",
-                "champagne",
-                "complete",
-                "landscape",
-                "fisherman",
-                "substitute",
-                "experience",
-                "employee",
-                "psychology",
-            ]  # list of words
+
             right_guess = False
             attempts_allowed = 2
             attempts_used = 0
@@ -159,7 +155,7 @@ while True:
                 random.shuffle(chars)
                 return "".join(chars)
 
-            unscrambled_word = random.choice(words)
+            unscrambled_word = get_random_word()
             word = scramble_word(unscrambled_word)
             unscramble_attempt = ""
             attempt = 1
@@ -170,18 +166,16 @@ while True:
                 unscramble_attempt != unscrambled_word
                 and attempts_used < attempts_allowed
             ):
-                try:
-                    unscramble_attempt = input("Take a guess at the unscrambled word: ")
-                    if unscramble_attempt == unscrambled_word:
-                        attempts_used += attempt
-                        right_guess = True
-                        print(
-                            f"Congrats, that is correct! The word was {unscrambled_word}"
-                        )
-                    else:
-                        attempts_used += attempt
-                except ValueError:
-                    print("Invalid input.")
+
+                unscramble_attempt = input("Take a guess at the unscrambled word: ")
+                if unscramble_attempt == unscrambled_word:
+                    attempts_used += attempt
+                    right_guess = True
+                    print(f"Congrats, that is correct! The word was {unscrambled_word}")
+                else:
+
+                    attempts_used += attempt
+
             if right_guess:
                 print("You win, player. Well done!")
             else:
