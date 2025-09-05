@@ -1,0 +1,8 @@
+apple
+banana
+computer
+python
+anagram
+school
+elephant
+chocolate
