@@ -1,6 +1,7 @@
 import random, time, os
 
 
+# GUESS THE NUMBER
 def play_guess_the_number():
     print(
         """ 
@@ -51,13 +52,20 @@ def play_guess_the_number():
             break
 
 
+# ANAGRAMMA
 def play_anagramma():
     def get_random_word():
-        script_dir = os.path.dirname(__file__)
-        file_path = os.path.join(script_dir, "words.txt")
-        with open(file_path) as f:
+        script_dir = os.path.dirname(
+            __file__
+        )  # getting folder where hello.py is located
+        file_path = os.path.join(
+            script_dir, "words.txt"
+        )  # made path to words.txt so python can always find it
+        with open(
+            file_path
+        ) as f:  # open words.txt and read all lines (each word) into a list
             words_in_file = f.read().splitlines()
-        return random.choice(words_in_file)
+        return random.choice(words_in_file)  # choose word
 
     def scramble_word(unshuffled_word):
         chars = list(unshuffled_word)
@@ -104,6 +112,7 @@ def play_anagramma():
             break
 
 
+# PAPER SCISSORS ROCK
 def play_psr():
     print(
         """ 
@@ -150,6 +159,7 @@ def play_psr():
             break
 
 
+# BLACKJACK
 def play_blackjack():
     print(
         """
@@ -233,6 +243,7 @@ def play_blackjack():
             break
 
 
+# MENU
 def show_menu():
     print(
         """   
@@ -247,12 +258,15 @@ def show_menu():
     return input("Your choice: ").lower()
 
 
+# GAME FUNCTION NAME DICTIONARY
 games = {
     "gtn": play_guess_the_number,
     "a": play_anagramma,
     "psr": play_psr,
     "bj": play_blackjack,
 }
+
+# ONE-OFF WELCOME MESSAGE
 print(
     """ 
         WELCOME TO PLAYTOPIA!
@@ -262,6 +276,8 @@ print(
         Give some a go and don't forget to have fun!    
     """
 )
+
+# GAME RUNNING LOOP
 while True:
     choice = show_menu()
     if choice in games:
