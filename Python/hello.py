@@ -38,7 +38,9 @@ def play_guess_the_number():
                     print("Too high. Try again.")
                     guesses += guess_value
                 else:
-                    print("Not in range. It should be from 1 to 100")
+                    print(
+                        f"Not in range. It should be from {lowest_allowed} to {highest_allowed}."
+                    )
             except ValueError:
                 print("Invalid input.")
         if win:
@@ -88,14 +90,14 @@ def play_anagramma():
         right_guess = False
         attempts_allowed = 2
         attempts_used = 0
-
+        attempt_value = 1
         unscrambled_word = get_random_word()
         scrambled = scramble_word(unscrambled_word)
 
         print(f"The scrambled word is {scrambled}.")
         while attempts_used < attempts_allowed and not right_guess:
             guess = input("Take a guess at the unscrambled word: ")
-            attempts_used += 1
+            attempts_used += attempt_value
             if guess == unscrambled_word:
                 right_guess = True
                 print(f"Congrats, that is correct! The word was {unscrambled_word}")
@@ -131,6 +133,7 @@ def play_psr():
         consecutive_wins = 0
         options = ["paper", "scissors", "rock"]
         finished = False
+        point_value = 1
 
         while not finished:
             user_choice = input("Choose paper, scissors, or rock: ").lower()
@@ -148,7 +151,7 @@ def play_psr():
                 or (user_choice == "scissors" and comp_choice == "paper")
             ):
                 print(f"You won! {user_choice} beats {comp_choice}.")
-                consecutive_wins += 1
+                consecutive_wins += point_value
             else:
                 print(f"You lost. {comp_choice} beats {user_choice}.")
                 finished = True
@@ -185,6 +188,8 @@ def play_blackjack():
             return int(card[0])
 
     while True:
+        top_num = 21
+        dealer_must = 17
         card_categories = ["Hearts", "Diamonds", "Clubs", "Spades"]
         cards_list = [
             "Ace",
@@ -221,17 +226,17 @@ def play_blackjack():
             if choice == "h":
                 new_card = deck.pop()
                 player_card.append(new_card)
-                if score(player_card) > 21:
+                if score(player_card) > top_num:
                     print("BUST! Dealer wins.")
                     break
             elif choice == "s":
-                while dealer_score < 17:
+                while dealer_score < dealer_must:
                     dealer_card.append(deck.pop())
                     dealer_score = score(dealer_card)
                 print(
-                    f"Dealer's cards: {', '.join([f'{r} of {s}' for r,s in dealer_card])} (score {dealer_score})"
+                    f"Dealer's cards: {', '.join([f'{crd} of {sut}' for crd,sut in dealer_card])} (score {dealer_score})"
                 )
-                if dealer_score > 21 or player_score > dealer_score:
+                if dealer_score > top_num or player_score > dealer_score:
                     print("Player wins!")
                 elif dealer_score > player_score:
                     print("Dealer wins!")
