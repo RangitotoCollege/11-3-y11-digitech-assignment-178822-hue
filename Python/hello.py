@@ -1,5 +1,12 @@
 import random, time, os
 
+scores = {
+    "gtn": 0,
+    "a": 0,
+    "psr": 0,
+    "bj": 0,
+}
+
 
 # GUESS THE NUMBER
 def play_guess_the_number():
@@ -45,10 +52,16 @@ def play_guess_the_number():
                 print("Invalid input.")
         if win:
             print(f"Awesome job! You guessed it in {guesses} guesses.")
+            if scores["gtn"] == 0 or guesses < scores["gtn"]:
+                scores["gtn"] = guesses
+                print(f"🎉 New best score: {guesses} guesses!")
+            else:
+                print(f"Your best so far is {scores["gtn"]} guesses.")
         else:
             print(
                 f"You lost because you exceeded the {guesses_allowed} guesses allowed, the number was {number}. Better luck next time!"
             )
+            print(f"Your best so far is {scores["gtn"]} guesses.")
         again = input("Play again? (y/n): ").lower()
         if again != "y":
             break
@@ -106,8 +119,11 @@ def play_anagramma():
 
         if right_guess:
             print("You win, player. Well done!")
+            scores["a"] += 1
+            print(f"Your current Anagramma score: {scores["a"]}")
         else:
             print(f"Unlucky! The word was {unscrambled_word}.")
+            print(f"Your current Anagramma score: {scores["a"]}")
 
         again = input("Play again? (y/n): ").lower()
         if again != "y":
@@ -157,6 +173,11 @@ def play_psr():
                 finished = True
 
         print(f"Game over. You had {consecutive_wins} consecutive wins!")
+        if consecutive_wins > scores["psr"]:
+            scores["psr"] = consecutive_wins
+            print(f"🎉 New best streak: {consecutive_wins} wins!")
+        else:
+            print(f"Your best streak so far: {scores['psr']} wins.")
         again = input("Play again? (y/n): ").lower()
         if again != "y":
             break
@@ -167,6 +188,9 @@ def play_blackjack():
     print(
         """
         WELCOME TO BLACKJACK!!!
+        
+        You start with $100. Make a bet. If you win it is doubled, if you lose, 
+        that money is given to the dealer. 
 
         Try to get as close to 21 as you can without going over. 
         
@@ -188,61 +212,111 @@ def play_blackjack():
             return int(card[0])
 
     while True:
-        top_num = 21
-        dealer_must = 17
-        card_categories = ["Hearts", "Diamonds", "Clubs", "Spades"]
-        cards_list = [
-            "Ace",
-            "2",
-            "3",
-            "4",
-            "5",
-            "6",
-            "7",
-            "8",
-            "9",
-            "10",
-            "Jack",
-            "Queen",
-            "King",
-        ]
-        deck = [(card, category) for category in card_categories for card in cards_list]
-        random.shuffle(deck)
-
-        player_card = [deck.pop(), deck.pop()]
-        dealer_card = [deck.pop(), deck.pop()]
-
-        def score(hand):
-            return sum(card_value(c) for c in hand)
+        # giving player starting money
+        player_money = 100
 
         while True:
-            player_score = score(player_card)
-            dealer_score = score(dealer_card)
-            print(
-                f"Your cards: {', '.join([f'{r} of {s}' for r,s in player_card])} (score {player_score})"
-            )
+            if player_money <= 0:
+                print("You're out of money! Game over. No score saved.")
+                return
 
-            choice = input("Hit or stand? (h/s): ").lower()
-            if choice == "h":
-                new_card = deck.pop()
-                player_card.append(new_card)
-                if score(player_card) > top_num:
-                    print("BUST! Dealer wins.")
-                    break
-            elif choice == "s":
-                while dealer_score < dealer_must:
-                    dealer_card.append(deck.pop())
-                    dealer_score = score(dealer_card)
+            print(f"You have ${player_money}.")
+            # get bet from player
+            while True:
+                try:
+                    bet = int(input("Place your bet: $"))
+                    if 1 <= bet <= player_money:
+                        break
+                    else:
+                        print(f"Bet must be between $1 and ${player_money}.")
+                except ValueError:
+                    print("Enter a valid number.")
+
+            top_num = 21
+            dealer_must = 17
+            card_categories = ["Hearts", "Diamonds", "Clubs", "Spades"]
+            cards_list = [
+                "Ace",
+                "2",
+                "3",
+                "4",
+                "5",
+                "6",
+                "7",
+                "8",
+                "9",
+                "10",
+                "Jack",
+                "Queen",
+                "King",
+            ]
+            deck = [
+                (card, category) for category in card_categories for card in cards_list
+            ]
+            random.shuffle(deck)
+
+            player_card = [deck.pop(), deck.pop()]
+            dealer_card = [deck.pop(), deck.pop()]
+
+            def score(hand):
+                return sum(card_value(c) for c in hand)
+
+            while True:
+                player_score = score(player_card)
+                dealer_score = score(dealer_card)
                 print(
-                    f"Dealer's cards: {', '.join([f'{crd} of {sut}' for crd,sut in dealer_card])} (score {dealer_score})"
+                    f"Your cards: {', '.join([f'{r} of {s}' for r,s in player_card])} (score {player_score})"
                 )
-                if dealer_score > top_num or player_score > dealer_score:
-                    print("Player wins!")
-                elif dealer_score > player_score:
-                    print("Dealer wins!")
+
+                choice = input("Hit or stand? (h/s): ").lower()
+                if choice == "h":
+                    new_card = deck.pop()
+                    player_card.append(new_card)
+                    if score(player_card) > top_num:
+                        print(
+                            f"Your cards: {', '.join([f'{r} of {s}' for r,s in player_card])} (score {player_score})"
+                        )
+                        print("BUST! Dealer wins.")
+                        player_money -= bet
+                        break
+                elif choice == "s":
+
+                    while dealer_score < dealer_must:
+                        dealer_card.append(deck.pop())
+                        dealer_score = score(dealer_card)
+                    print(
+                        f"Dealer's cards: {', '.join([f'{crd} of {sut}' for crd,sut in dealer_card])} (score {dealer_score})"
+                    )
+                    if dealer_score > top_num or player_score > dealer_score:
+                        print("Player wins!")
+                        player_money += bet
+                    elif dealer_score > player_score:
+                        print("Dealer wins!")
+                        player_money -= bet
+                    else:
+                        print("It's a tie. (Push)")
+                    break
+
+            print(f"Your balance: ${player_money}")
+
+            new_round = input("Play another hand? (y/n): ").lower()
+            while new_round != "y" and new_round != "n":
+                print("Invalid input. Try again")
+                new_round = input("Play another hand? (y/n): ").lower()
+
+            if new_round != "y":
+                if player_money > 0:
+                    if player_money > scores["bj"] or scores["bj"] == 0:
+                        scores["bj"] = player_money
+                        print(
+                            f"Your new highest Blackjack score saved: ${player_money}"
+                        )
+                    else:
+                        print(f"Your highscore remains {scores["blackjack"]}.")
                 else:
-                    print("It's a tie.")
+                    print("No score saved because you went broke.")
                 break
+
         again = input("Play again? (y/n): ").lower()
         if again != "y":
             break
@@ -257,6 +331,7 @@ def show_menu():
         a   - Anagramma
         psr - Paper Scissors Rock
         bj  - Blackjack
+        show - Show scoreboard
         quit - Exit PlayTopia
         """
     )
@@ -270,6 +345,7 @@ games = {
     "psr": play_psr,
     "bj": play_blackjack,
 }
+
 
 # ONE-OFF WELCOME MESSAGE
 print(
@@ -291,5 +367,11 @@ while True:
     elif choice == "quit":
         print("Thanks for playing PlayTopia!")
         break
+    elif choice == "show":
+        print("\n--- SCOREBOARD ---")
+        for game, score in scores.items():
+            if score != 0:
+                print(f"{game}: {score}")
+        print("------------------\n")
     else:
         print("Invalid choice. Try again.")
